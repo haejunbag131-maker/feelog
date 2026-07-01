@@ -53,8 +53,7 @@ test.describe("Layout Link Routing", () => {
     await expect(picturesTab).toHaveAttribute("data-active", "false");
   });
 
-  // 사진보관함 테스트는 skip (요구사항에 따름)
-  test.skip("사진보관함 클릭 시 사진목록 페이지로 이동", async ({ page }) => {
+  test("사진보관함 클릭 시 사진목록 페이지로 이동", async ({ page }) => {
     // Given: 일기목록 페이지
     
     // When: 사진보관함 클릭
@@ -64,7 +63,7 @@ test.describe("Layout Link Routing", () => {
     await expect(page).toHaveURL("/pictures");
   });
 
-  test.skip("사진보관함 클릭 시 CSS 액티브 상태 확인", async ({ page }) => {
+  test("사진보관함 클릭 시 CSS 액티브 상태 확인", async ({ page }) => {
     // Given: 일기목록 페이지
     
     // When: 사진보관함 클릭

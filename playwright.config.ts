@@ -14,8 +14,8 @@ export default defineConfig({
   //   forbidOnly: !!process.env.CI,
   //   retries: process.env.CI ? 2 : 0,
 
-  //   /* CI에서 병렬 실행 워커 수 조정 */
-  //   workers: process.env.CI ? 1 : undefined,
+  /* CI에서는 직렬 실행하고, 로컬에서도 과도한 병렬화로 인한 flake를 방지 */
+  workers: process.env.CI ? 1 : 4,
 
   //   /* 리포터 설정 */
   //   reporter: "html",

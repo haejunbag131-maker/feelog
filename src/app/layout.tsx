@@ -20,11 +20,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Joon 일기장 | Joon Diary",
+  title: "Emotion Diary | 감정 일기장",
   openGraph: {
-    title: "박해준 일기장",
+    title: "Emotion Diary | 감정 일기장",
   },
-  description: "박해준의 개인 일기장입니다.",
+  description: "하루의 감정과 이야기를 기록하는 Emotion Diary입니다.",
   icons: {
     icon: "icon.svg",
   },
@@ -36,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

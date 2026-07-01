@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import styles from "./styles.module.css";
 
 export interface SelectOption {
@@ -102,9 +103,11 @@ export const SelectBox: React.FC<SelectBoxProps> = ({
         <div className={styles.content}>
           <span className={styles.text}>{displayText}</span>
           <div className={styles.icon}>
-            <img
+            <Image
               src="/icons/arrow_drop_down.svg"
               alt="dropdown"
+              width={9}
+              height={5}
               className={styles.arrow}
             />
           </div>
@@ -126,9 +129,11 @@ export const SelectBox: React.FC<SelectBoxProps> = ({
             >
               <span className={styles.optionText}>{option.label}</span>
               {value === option.value && (
-                <img
+                <Image
                   src="/icons/check_outline_light_xs.svg"
                   alt="selected"
+                  width={16}
+                  height={16}
                   className={styles.checkIcon}
                 />
               )}

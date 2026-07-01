@@ -88,11 +88,10 @@ test.describe("Layout Area Visibility", () => {
     await expect(footer).toBeVisible();
   });
 
-  // /auth/login 테스트는 skip (요구사항에 따름)
-  test.skip("로그인 페이지(/auth/login)에서 모든 영역 숨김", async ({ page }) => {
+  test("로그인 페이지(/auth/login)에서 모든 영역 숨김", async ({ page }) => {
     // Given: 로그인 페이지로 이동
     await page.goto("/auth/login");
-    await page.waitForSelector('[data-testid="auth-login-container"]');
+    await page.waitForSelector('[data-testid="login-container"]');
     
     // Then: header 영역 숨김
     const header = page.locator('[data-testid="layout-header"]');
@@ -111,11 +110,10 @@ test.describe("Layout Area Visibility", () => {
     await expect(footer).not.toBeVisible();
   });
 
-  // /auth/signup 테스트는 skip (요구사항에 따름)
-  test.skip("회원가입 페이지(/auth/signup)에서 모든 영역 숨김", async ({ page }) => {
+  test("회원가입 페이지(/auth/signup)에서 모든 영역 숨김", async ({ page }) => {
     // Given: 회원가입 페이지로 이동
     await page.goto("/auth/signup");
-    await page.waitForSelector('[data-testid="auth-signup-container"]');
+    await page.waitForSelector('[data-testid="signup-container"]');
     
     // Then: header 영역 숨김
     const header = page.locator('[data-testid="layout-header"]');
@@ -134,8 +132,7 @@ test.describe("Layout Area Visibility", () => {
     await expect(footer).not.toBeVisible();
   });
 
-  // /pictures 테스트는 skip (요구사항에 따름)
-  test.skip("사진목록 페이지(/pictures)에서 모든 영역 표시", async ({ page }) => {
+  test("사진목록 페이지(/pictures)에서 모든 영역 표시", async ({ page }) => {
     // Given: 사진목록 페이지로 이동
     await page.goto("/pictures");
     await page.waitForSelector('[data-testid="layout-container"]');
