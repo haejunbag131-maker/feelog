@@ -95,18 +95,7 @@ AI의 병렬성을 무조건 사용하는 대신 **의존성과 충돌 범위를
 
 AI의 응답이나 체크리스트만으로 작업을 완료 처리하지 않았습니다.
 
-```mermaid
-flowchart LR
-    A[Figma MCP 분석] --> B[Rules 선택]
-    B --> C[단계별 Prompt]
-    C --> D[Playwright 테스트 작성]
-    D --> E[기능 구현]
-    E --> F{검증 통과?}
-    F -- 아니오 --> G[원인 분석·프롬프트 보완]
-    G --> D
-    F -- 예 --> H[Rules·코드 스타일 재검토]
-    H --> I[Production Build]
-```
+![Feelog 화면 흐름](docs/feelog-flow.png)
 
 - 기능 구현 전 사용자 시나리오를 Playwright 테스트로 작성
 - CSS Module 해시와 충돌하지 않도록 `data-testid` 사용
