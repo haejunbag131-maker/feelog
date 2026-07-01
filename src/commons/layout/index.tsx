@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={navigateToDiaries}
                 data-testid="layout-logo"
               >
-                Joon&apos;s Diary
+                Feelog
               </div>
             )}
             <div className={styles.authStatus} data-testid="layout-auth-status">
@@ -108,10 +108,10 @@ export default function Layout({ children }: LayoutProps) {
       {showFooter && (
         <footer className={styles.footer} data-testid="layout-footer">
           <div className={styles.footerContent}>
-            <div className={styles.footerTitle}>Joon&apos;s Diary</div>
-            <div className={styles.footerInfo}>대표 : {"{joon}"}</div>
+            <div className={styles.footerTitle}>Feelog</div>
+            <div className={styles.footerInfo}>대표 : {"{jun}"}</div>
             <div className={styles.footerCopyright}>
-              Copyright © 2025. {"{joon}"} Co., Ltd.
+              Copyright © 2025. Feelog Co., Ltd.
             </div>
           </div>
         </footer>
