@@ -20,9 +20,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Feelog | 감정 일기장",
+  title: "Feelog",
   openGraph: {
-    title: "Feelog | 감정 일기장",
+    title: "Feelog",
   },
   description: "하루의 감정과 이야기를 기록하는 Feelog입니다.",
   icons: {

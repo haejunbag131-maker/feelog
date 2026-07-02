@@ -1,13 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { DiaryData } from "@/components/diaries/hooks/index.binding.hook";
-import { supabase } from "@/commons/lib/supabase";
+import { authenticateRequest } from "@/commons/lib/server-auth";
+import { getSupabaseAdmin } from "@/commons/lib/supabase";
+
+const createDiarySchema = z.object({
+  title: z.string().trim().min(1).max(200),
+  content: z.string().trim().min(1).max(20000),
+  emotion: z.enum(["HAPPY", "SAD", "ANGRY", "SURPRISE", "ETC"]),
+});
+
+const updateDiarySchema = createDiarySchema.extend({
+  id: z.number().int().positive(),
+});
+
+const unauthorizedResponse = () =>
+  NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
 
 /**
  * 일기 목록 조회
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const { data, error } = await supabase
+    const user = await authenticateRequest(request);
+    if (!user) return unauthorizedResponse();
+
+    const { data, error } = await getSupabaseAdmin()
       .from("diaries")
       .select("*")
       .order("createdAt", { ascending: false });
@@ -35,16 +53,23 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const user = await authenticateRequest(request);
+    if (!user) return unauthorizedResponse();
 
-    const { data, error } = await supabase
+    const parsedBody = createDiarySchema.safeParse(await request.json());
+    if (!parsedBody.success) {
+      return NextResponse.json(
+        { error: "유효하지 않은 일기 데이터입니다." },
+        { status: 400 }
+      );
+    }
+
+    const { data, error } = await getSupabaseAdmin()
       .from("diaries")
       .insert({
-        title: body.title,
-        content: body.content,
-        emotion: body.emotion,
-        userId: body.userId,
-        userName: body.userName,
+        ...parsedBody.data,
+        userId: user._id,
+        userName: user.name,
       })
       .select()
       .single();
@@ -72,19 +97,25 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
+    const user = await authenticateRequest(request);
+    if (!user) return unauthorizedResponse();
 
-    const { data, error } = await supabase
+    const parsedBody = updateDiarySchema.safeParse(await request.json());
+    if (!parsedBody.success) {
+      return NextResponse.json(
+        { error: "유효하지 않은 일기 데이터입니다." },
+        { status: 400 }
+      );
+    }
+
+    const { id, ...updates } = parsedBody.data;
+    const { data, error } = await getSupabaseAdmin()
       .from("diaries")
-      .update({
-        title: body.title,
-        content: body.content,
-        emotion: body.emotion,
-        // userId와 userName은 업데이트하지 않음 (기존 값 유지)
-      })
-      .eq("id", body.id)
+      .update(updates)
+      .eq("id", id)
+      .eq("userId", user._id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("일기 수정 중 오류:", error);
@@ -96,7 +127,7 @@ export async function PUT(request: NextRequest) {
 
     if (!data) {
       return NextResponse.json(
-        { error: "일기를 찾을 수 없습니다." },
+        { error: "수정할 수 있는 일기를 찾을 수 없습니다." },
         { status: 404 }
       );
     }
@@ -116,23 +147,37 @@ export async function PUT(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const id = parseInt(searchParams.get("id") || "0");
+    const user = await authenticateRequest(request);
+    if (!user) return unauthorizedResponse();
 
-    if (isNaN(id)) {
+    const id = Number(new URL(request.url).searchParams.get("id"));
+    if (!Number.isInteger(id) || id <= 0) {
       return NextResponse.json(
         { error: "유효하지 않은 ID입니다." },
         { status: 400 }
       );
     }
 
-    const { error } = await supabase.from("diaries").delete().eq("id", id);
+    const { data, error } = await getSupabaseAdmin()
+      .from("diaries")
+      .delete()
+      .eq("id", id)
+      .eq("userId", user._id)
+      .select("id")
+      .maybeSingle();
 
     if (error) {
       console.error("일기 삭제 중 오류:", error);
       return NextResponse.json(
         { error: "일기 삭제에 실패했습니다." },
         { status: 500 }
+      );
+    }
+
+    if (!data) {
+      return NextResponse.json(
+        { error: "삭제할 수 있는 일기를 찾을 수 없습니다." },
+        { status: 404 }
       );
     }
 

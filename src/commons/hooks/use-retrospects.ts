@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { RetrospectData } from "@/components/diaries-detail/hooks/index.retrospect.form.hook";
+import { authenticatedFetch } from "@/commons/lib/authenticated-fetch";
 
 /**
  * 회고 목록 조회 Hook
@@ -13,7 +14,7 @@ export function useRetrospects(diaryId?: number) {
       const url = diaryId
         ? `/api/retrospects?diaryId=${diaryId}`
         : "/api/retrospects";
-      const res = await fetch(url);
+      const res = await authenticatedFetch(url);
 
       if (!res.ok) {
         throw new Error("회고 조회에 실패했습니다.");
@@ -36,7 +37,7 @@ export function useCreateRetrospect() {
     mutationFn: async (
       retrospect: Omit<RetrospectData, "id" | "createdAt">
     ) => {
-      const res = await fetch("/api/retrospects", {
+      const res = await authenticatedFetch("/api/retrospects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(retrospect),
@@ -72,7 +73,7 @@ export function useUpdateRetrospect() {
       content: string;
       diaryId: number;
     }) => {
-      const res = await fetch("/api/retrospects", {
+      const res = await authenticatedFetch("/api/retrospects", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, content }),
@@ -106,7 +107,7 @@ export function useDeleteRetrospect() {
       id: number;
       diaryId: number;
     }) => {
-      const res = await fetch(`/api/retrospects?id=${id}`, {
+      const res = await authenticatedFetch(`/api/retrospects?id=${id}`, {
         method: "DELETE",
       });
 

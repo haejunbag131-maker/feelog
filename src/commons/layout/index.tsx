@@ -109,7 +109,7 @@ export default function Layout({ children }: LayoutProps) {
         <footer className={styles.footer} data-testid="layout-footer">
           <div className={styles.footerContent}>
             <div className={styles.footerTitle}>Feelog</div>
-            <div className={styles.footerInfo}>대표 : {"{jun}"}</div>
+            <div className={styles.footerInfo}>대표 : {"{PARK HAEJUN}"}</div>
             <div className={styles.footerCopyright}>
               Copyright © 2025. Feelog Co., Ltd.
             </div>

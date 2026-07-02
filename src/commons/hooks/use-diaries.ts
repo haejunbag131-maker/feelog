@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DiaryData } from "@/components/diaries/hooks/index.binding.hook";
+import { authenticatedFetch } from "@/commons/lib/authenticated-fetch";
 
 /**
  * 일기 목록 조회 Hook
@@ -10,7 +11,7 @@ export function useDiaries() {
   return useQuery({
     queryKey: ["diaries"],
     queryFn: async () => {
-      const res = await fetch("/api/diaries");
+      const res = await authenticatedFetch("/api/diaries");
       if (!res.ok) {
         throw new Error("일기 조회에 실패했습니다.");
       }
@@ -28,7 +29,7 @@ export function useCreateDiary() {
 
   return useMutation({
     mutationFn: async (diary: Omit<DiaryData, "id" | "createdAt">) => {
-      const res = await fetch("/api/diaries", {
+      const res = await authenticatedFetch("/api/diaries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(diary),
@@ -55,7 +56,7 @@ export function useUpdateDiary() {
 
   return useMutation({
     mutationFn: async (diary: DiaryData) => {
-      const res = await fetch("/api/diaries", {
+      const res = await authenticatedFetch("/api/diaries", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(diary),
@@ -82,7 +83,7 @@ export function useDeleteDiary() {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      const res = await fetch(`/api/diaries?id=${id}`, {
+      const res = await authenticatedFetch(`/api/diaries?id=${id}`, {
         method: "DELETE",
       });
 
