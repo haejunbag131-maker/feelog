@@ -173,6 +173,59 @@ test.describe("Layout Auth Hook - 로그인 유저", () => {
     await page.waitForSelector('[data-testid="login-container"]');
   });
 
+  test("로그아웃 후 다이어리 재진입 시 이전 목록 캐시가 노출되지 않아야 한다", async ({
+    page,
+  }) => {
+    await page.route("**/api/diaries", async (route) => {
+      const authorization = route.request().headers()["authorization"];
+
+      if (!authorization) {
+        await route.fulfill({
+          status: 401,
+          contentType: "application/json",
+          body: JSON.stringify({ error: "로그인이 필요합니다." }),
+        });
+        return;
+      }
+
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          diaries: [
+            {
+              id: 999,
+              title: "로그아웃 캐시 테스트",
+              content: "로그인 상태에서만 보여야 합니다.",
+              emotion: "HAPPY",
+              createdAt: "2026-07-02T00:00:00.000Z",
+              userId: "test-user-id",
+              userName: "테스트 사용자",
+            },
+          ],
+        }),
+      });
+    });
+
+    await page.goto("/diaries");
+    await page.evaluate(() => {
+      localStorage.setItem("accessToken", "test-access-token");
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ _id: "test-user-id", name: "테스트 사용자" })
+      );
+    });
+    await page.reload();
+
+    await expect(page.locator('[data-testid="diary-card-999"]')).toBeVisible();
+
+    await page.locator('[data-testid="logout-button"]').click();
+    await expect(page).toHaveURL("/auth/login");
+
+    await page.goto("/diaries");
+    await expect(page.locator('[data-testid="diary-card-999"]')).toHaveCount(0);
+  });
+
   test("/diaries에 접속하여 페이지 로드 확인", async ({ page }) => {
     // Given: 로그인 후 로그아웃한 상태
     await page.goto("/auth/login");

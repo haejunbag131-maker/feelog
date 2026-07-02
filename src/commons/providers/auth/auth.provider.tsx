@@ -9,6 +9,7 @@ import {
   ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { paths } from "@/commons/constants/url";
 
 /**
@@ -69,6 +70,7 @@ const STORAGE_KEYS = {
  */
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -158,19 +160,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
    */
   const logout = useCallback(() => {
     if (typeof window === "undefined") return;
-    
+
+    // 화면에서 로그인 상태와 사용자 데이터를 즉시 제거
+    setIsLoggedIn(false);
+    setUser(null);
+
     // localStorage에서 accessToken 제거
     localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    
+
     // localStorage에서 user 제거
     localStorage.removeItem(STORAGE_KEYS.USER);
-    
+
+    // 이전 사용자의 일기/회고를 포함한 서버 캐시 제거
+    queryClient.clear();
+
     // 커스텀 이벤트 발생 (동일 탭에서 변경 감지)
     window.dispatchEvent(new Event("localStorageChange"));
-    
+
     // 로그인 페이지로 이동
     router.push(paths.auth.login);
-  }, [router]);
+  }, [queryClient, router]);
 
   /**
    * 로그인 상태 확인 함수
