@@ -30,13 +30,15 @@ export default function Layout({ children }: LayoutProps) {
         <header className={styles.header} data-testid="layout-header">
           <div className={styles.headerContent}>
             {showLogo && (
-              <div
+              <button
+                type="button"
                 className={styles.logo}
                 onClick={navigateToDiaries}
                 data-testid="layout-logo"
+                aria-label="Feelog 홈으로 이동"
               >
-                Feelog
-              </div>
+                <span className={styles.logoText}>Feelog</span>
+              </button>
             )}
             <div className={styles.authStatus} data-testid="layout-auth-status">
               {isLoggedIn ? (

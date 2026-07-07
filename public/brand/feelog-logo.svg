@@ -1,0 +1,14 @@
+<svg width="134" height="40" viewBox="0 0 134 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="feelog-logo-title">
+  <title id="feelog-logo-title">Feelog</title>
+  <defs>
+    <linearGradient id="feelog-logo-gradient" x1="7" y1="4" x2="35" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6DA5FA"/>
+      <stop offset="1" stop-color="#92EAF5"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="36" height="36" rx="11" fill="url(#feelog-logo-gradient)"/>
+  <path d="M14.5 12.4C14.5 10.744 15.844 9.4 17.5 9.4H32V15.2H21.2V19.9H30.4V25.5H21.2V31H14.5V12.4Z" fill="white"/>
+  <path d="M23.5 29.1C25.2 30.8 28.4 30.8 30.1 29.1" stroke="#FFD666" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="31" cy="12.5" r="2.6" fill="#FFD666"/>
+  <text x="50" y="29" fill="#1C1C1C" font-family="Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" font-size="26" font-weight="700" letter-spacing="0">Feelog</text>
+</svg>

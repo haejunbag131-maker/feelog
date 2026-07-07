@@ -26,7 +26,11 @@ export const metadata: Metadata = {
   },
   description: "하루의 감정과 이야기를 기록하는 Feelog입니다.",
   icons: {
-    icon: "icon.svg",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/favicon.ico",
   },
 };
 
